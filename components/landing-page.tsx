@@ -2,10 +2,13 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
+import Image from "next/image" // Added import for Next.js Image component
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { CheckCircle, Shield, Zap, Globe, BarChart, Users, Briefcase, Building, Landmark, Plane, ShoppingBag, Stethoscope, Umbrella, Phone, Car, GraduationCap, Wheat } from "lucide-react"
+import { CheckCircle, Shield, Zap, Globe, Building, Landmark, Plane, ShoppingBag, Stethoscope, Umbrella, Phone, Car, GraduationCap, Wheat } from "lucide-react" // Removed BarChart, Users, Briefcase
+
+export const runtime = 'edge';
 
 export function LandingPageComponent() {
   const [activeCustomer, setActiveCustomer] = useState(0)
@@ -16,7 +19,7 @@ export function LandingPageComponent() {
     globalWatchlists: 0,
   })
   const [isVisible, setIsVisible] = useState(false)
-  const statsRef = useRef(null)
+  const statsRef = useRef<HTMLDivElement | null>(null) // Added TypeScript type
   const [heroWord, setHeroWord] = useState(language === 'en' ? 'Simple' : 'Simple')
 
   const customers = [
@@ -137,13 +140,15 @@ export function LandingPageComponent() {
       { threshold: 0.1 }
     )
 
-    if (statsRef.current) {
-      observer.observe(statsRef.current)
+    const currentStatsRef = statsRef.current // Stored ref in a variable
+
+    if (currentStatsRef) {
+      observer.observe(currentStatsRef)
     }
 
     return () => {
-      if (statsRef.current) {
-        observer.unobserve(statsRef.current)
+      if (currentStatsRef) {
+        observer.unobserve(currentStatsRef)
       }
     }
   }, [])
@@ -157,7 +162,7 @@ export function LandingPageComponent() {
       let currentStep = 0
 
       const timer = setInterval(() => {
-        setAnimatedNumbers(prev => ({
+        setAnimatedNumbers(() => ({ // Removed 'prev' as it wasn't used
           entitiesScreened: Math.min(Math.round((currentStep / steps) * 1000000), 1000000),
           accuracyRate: Math.min(parseFloat(((currentStep / steps) * 99.9).toFixed(1)), 99.9),
           globalWatchlists: Math.min(Math.round((currentStep / steps) * 200), 200),
@@ -271,12 +276,19 @@ export function LandingPageComponent() {
                   }`}
                   onMouseEnter={() => setActiveCustomer(index)}
                 >
-                  <img src={customer.logo} alt={customer.name} className="w-20 h-20" />
+                  {/* Replaced <img> with <Image /> */}
+                  <Image
+                    src={customer.logo}
+                    alt={customer.name}
+                    width={80} // Set appropriate width
+                    height={80} // Set appropriate height
+                    className="w-20 h-20"
+                  />
                 </div>
               ))}
             </div>
             <div className="text-center">
-              <p className="text-xl italic mb-2">"{customers[activeCustomer].quote}"</p>
+              <p className="text-xl italic mb-2">&quot;{customers[activeCustomer].quote}&quot;</p> {/* Escaped quotes */}
               <p className="font-semibold">{customers[activeCustomer].name}</p>
             </div>
           </div>
