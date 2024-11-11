@@ -225,7 +225,7 @@ export function Page() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs value={searchType} onValueChange={(v) => setSearchType(v as 'person' | 'company')}>
+           <Tabs value={searchType} onValueChange={(v: 'person' | 'company') => setSearchType(v)}>
             <TabsList className="grid w-full grid-cols-2 mb-6">
               <TabsTrigger value="person" className="flex items-center gap-2">
                 <User className="h-4 w-4" />
