@@ -10,8 +10,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { ArrowRight, CheckCircle, Shield, Zap, Globe, Users, Briefcase, Building, Search, Database, Lock } from "lucide-react"
-import { LandingPageComponent } from '@/components/landing-page';
+import { ArrowRight, CheckCircle, Shield, Globe, Users, Briefcase, Building, Search, Database, Lock } from "lucide-react"
+
 
 export const runtime = 'edge';
 
@@ -117,7 +117,7 @@ const translations = {
 const SolutionsPageComponent = () => {
   const [activeTab, setActiveTab] = useState("individual")
   const [animationKey, setAnimationKey] = useState(0)
-  const [language, setLanguage] = useState('en')
+  const [language, setLanguage] = useState<"en" | "es">("en");
   const { ref: sectionRef, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1,

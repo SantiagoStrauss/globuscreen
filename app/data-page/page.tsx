@@ -1,15 +1,14 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { ArrowRight, Database, Globe, Shield, RefreshCcw, Users, BarChart, Menu, X } from "lucide-react"
+import { ArrowRight, Database, Globe, Shield, RefreshCcw} from "lucide-react"
 import {
   LineChart,
   Line,
@@ -123,18 +122,18 @@ const dataBreakdown = [
 
 const COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444"]
 
-export function EnhancedDataPage() {
-  const [language, setLanguage] = useState("en")
+export default function EnhancedDataPage() {
+  const [language, setLanguage] = useState<"en" | "es">("en") // Updated line
   const [activeTab, setActiveTab] = useState("overview")
-  const [menuOpen, setMenuOpen] = useState(false)
-  const { ref, inView } = useInView({
+  const [menuOpen] = useState(false)
+  const { ref } = useInView({
     triggerOnce: true,
     threshold: 0.1,
   })
 
   const t = translations[language]
 
-  const DataPoint = ({ icon: Icon, value, label }) => (
+  const DataPoint = ({ icon: Icon, value, label }: { icon: React.ComponentType<any>, value: string, label: string }) => (
     <motion.div
       className="flex flex-col items-center p-6 bg-white rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105"
       whileHover={{ y: -5 }}
@@ -510,22 +509,3 @@ export function EnhancedDataPage() {
     </div>
   )
 }
-
-<style jsx>{`
-  @media (max-width: 640px) {
-    .recharts-wrapper {
-      font-size: 12px;
-    }
-    .recharts-surface {
-      overflow: visible;
-    }
-  }
-  .recharts-pie-label-text {
-    font-weight: bold;
-  }
-  .recharts-tooltip-wrapper {
-    z-index: 1000;
-  }
-`}</style>
-
-export default EnhancedDataPage;

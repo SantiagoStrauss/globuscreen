@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
@@ -34,7 +34,6 @@ const translations = {
     solutions: "Solutions",
     data: "Data",
     pricing: "Pricing",
-    enterprise: "Enterprise",
     login: "Log In",
     signUp: "Sign Up",
     footerSolutions: "Solutions",
@@ -70,7 +69,6 @@ const translations = {
     solutions: "Soluciones",
     data: "Datos",
     pricing: "Precios",
-    enterprise: "Empresas",
     login: "Iniciar sesión",
     signUp: "Registrarse",
     footerSolutions: "Soluciones",
@@ -126,8 +124,8 @@ const pricingPlans = [
   },
 ]
 
-export function PricingPageComponent() {
-  const [language, setLanguage] = useState('en')
+export default function PricingPageComponent() {
+  const [language, setLanguage] = useState<"en" | "es">("en");
   const [annualBilling, setAnnualBilling] = useState(true)
 
   const t = translations[language]
@@ -230,7 +228,9 @@ export function PricingPageComponent() {
                     <div className="text-4xl font-bold mb-4">{t.customQuote}</div>
                   ) : (
                     <div className="text-4xl font-bold mb-4">
-                      ${annualBilling ? plan.price.annual : plan.price.monthly}
+                      ${annualBilling ? 
+                        (typeof plan.price !== 'string' ? plan.price.annual : '') : 
+                        (typeof plan.price !== 'string' ? plan.price.monthly : '')}
                       <span className="text-lg font-normal">{t.perMonth}</span>
                     </div>
                   )}
@@ -354,5 +354,3 @@ export function PricingPageComponent() {
     </div>
   )
 }
-
-export default PricingPageComponent;

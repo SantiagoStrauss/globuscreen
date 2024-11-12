@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -126,8 +125,7 @@ const ResultCard: React.FC<{ result: Result }> = ({ result }) => {
   )
 }
 
-export function Page() {
-  const router = useRouter()
+export default function Page() {
   const [searchType, setSearchType] = useState<'person' | 'company'>('person')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -225,7 +223,7 @@ export function Page() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-           <Tabs value={searchType} onValueChange={(v) => setSearchType(v as 'person' | 'company')}>
+          <Tabs value={searchType} onValueChange={(v) => setSearchType(v as 'person' | 'company')}>
             <TabsList className="grid w-full grid-cols-2 mb-6">
               <TabsTrigger value="person" className="flex items-center gap-2">
                 <User className="h-4 w-4" />
@@ -318,7 +316,7 @@ export function Page() {
           </motion.div>
         )}
 
-        {response && response.responses.match.results.length > 0 && (
+        {response && response.responses?.match?.results?.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -351,5 +349,3 @@ export function Page() {
     </div>
   )
 }
-
-export default Page

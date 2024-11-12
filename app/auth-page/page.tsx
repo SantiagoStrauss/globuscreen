@@ -62,8 +62,12 @@ export default function AuthPageComponent() {
 
       setMessage({ type: 'success', text: 'Logged in successfully!' })
       router.push('/dashboard-page') // Updated redirect path
-    } catch (error: any) {
-      setMessage({ type: 'error', text: error.message || 'An error occurred during login' })
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setMessage({ type: 'error', text: error.message || 'An error occurred during login' })
+      } else {
+        setMessage({ type: 'error', text: 'An unexpected error occurred during login' })
+      }
     } finally {
       setIsLoading(false)
     }
@@ -87,8 +91,12 @@ export default function AuthPageComponent() {
 
       setMessage({ type: 'success', text: 'Signed up successfully!' })
       router.push('/welcome-page') // Redirect after sign up
-    } catch (error: any) {
-      setMessage({ type: 'error', text: error.message || 'An error occurred during sign up' })
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setMessage({ type: 'error', text: error.message || 'An error occurred during sign up' })
+      } else {
+        setMessage({ type: 'error', text: 'An unexpected error occurred during sign up' })
+      }
     } finally {
       setIsLoading(false)
     }
@@ -163,7 +171,7 @@ export default function AuthPageComponent() {
       </CardContent>
       <CardFooter>
         {defaultTab === 'login' ? (
-          <Link href="/auth-page?tab=signup">Don't have an account? Sign Up</Link>
+          <Link href="/auth-page?tab=signup">Don&apos;t have an account? Sign Up</Link>
         ) : (
           <Link href="/auth-page?tab=login">Already have an account? Login</Link>
         )}

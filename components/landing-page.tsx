@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CheckCircle, Shield, Zap, Globe, Building, Landmark, Plane, ShoppingBag, Stethoscope, Umbrella, Phone, Car, GraduationCap, Wheat } from "lucide-react" // Removed BarChart, Users, Briefcase
-import { useRouter } from "next/navigation" // Opcional si usas redireccionamiento programático
 
 export const runtime = 'edge';
 

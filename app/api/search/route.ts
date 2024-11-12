@@ -8,7 +8,7 @@ export async function POST(request: Request) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'ApiKey 4001f04a498f7e6ab3e23d2679897531',
+        'Authorization': 'ApiKey 8dabdaee668b5323e32308cb4b3e02ea',
       },
       body: JSON.stringify(body),
     })

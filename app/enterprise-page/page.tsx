@@ -5,13 +5,13 @@ import Link from "next/link"
 import { motion, useAnimation } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { ArrowRight, Shield, Zap, Globe, Users, Briefcase, Building, Search, Database, Lock, BarChart, Cog, Headphones } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { ArrowRight, Shield, Zap, Globe, Users, Briefcase, Building, BarChart, Cog, Headphones } from "lucide-react"
 import confetti from 'canvas-confetti'
 
 export const runtime = 'edge';
 
+type TranslationKey = keyof typeof translations["en"];
 const translations = {
   en: {
     title: "Enterprise-Grade Compliance Solutions",
@@ -109,7 +109,15 @@ const translations = {
   }
 }
 
-const features = [
+interface Feature {
+  icon: React.ComponentType<{ className?: string }>;
+  key: keyof Pick<typeof translations["en"], 
+    "customization" | "security" | "integration" | 
+    "analytics" | "support" | "scalability">;
+  color: string;
+}
+
+const features: Feature[] = [
   { icon: Cog, key: "customization", color: "from-blue-400 to-blue-600" },
   { icon: Shield, key: "security", color: "from-green-400 to-green-600" },
   { icon: Zap, key: "integration", color: "from-yellow-400 to-yellow-600" },
@@ -118,7 +126,12 @@ const features = [
   { icon: Users, key: "scalability", color: "from-indigo-400 to-indigo-600" },
 ]
 
-const industries = [
+interface Industry {
+  icon: React.ComponentType<{ className?: string }>;
+  key: TranslationKey;
+}
+
+const industries: Industry[] = [
   { icon: Building, key: "banking" },
   { icon: Briefcase, key: "finance" },
   { icon: Shield, key: "insurance" },
@@ -127,15 +140,15 @@ const industries = [
   { icon: Users, key: "government" },
 ]
 
-export function EnterprisePageComponent() {
-  const [language, setLanguage] = useState('en')
-  const [activeFeature, setActiveFeature] = useState(null)
+export default function EnterprisePageComponent() {
+  const [language, setLanguage] = useState<"en" | "es">("en");
+  const [activeFeature, setActiveFeature] = useState<TranslationKey | null>(null);
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
-  })
+  });
 
-  const controls = useAnimation()
+  const controls = useAnimation();
 
   useEffect(() => {
     if (inView) {
@@ -143,20 +156,21 @@ export function EnterprisePageComponent() {
         opacity: 1,
         y: 0,
         transition: { delay: i * 0.1 }
-      }))
+      }));
     }
-  }, [controls, inView])
+  }, [controls, inView]);
 
-  const t = translations[language]
+  const t = translations[language];
 
-  const handleFeatureClick = (key) => {
-    setActiveFeature(activeFeature === key ? null : key)
+  // Update the handleFeatureClick function with the explicit type
+  const handleFeatureClick = (key: TranslationKey) => {
+    setActiveFeature(activeFeature === key ? null : key);
     confetti({
       particleCount: 100,
       spread: 70,
       origin: { y: 0.6 }
-    })
-  }
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
@@ -309,7 +323,7 @@ export function EnterprisePageComponent() {
                 <CardContent className="relative">
                   <div className="absolute top-0 left-0 w-16 h-16 bg-blue-500 rounded-br-full"></div>
                   <div className="pt-20">
-                    <p className="italic mb-4 text-lg">"{t.testimonial1}"</p>
+                    <p className="italic mb-4 text-lg">&quot;{t.testimonial1}&quot;</p>
                     <p className="font-semibold">- John Doe, CEO of Global Bank</p>
                   </div>
                 </CardContent>
@@ -324,7 +338,7 @@ export function EnterprisePageComponent() {
                 <CardContent className="relative">
                   <div className="absolute top-0 right-0 w-16 h-16 bg-purple-500 rounded-bl-full"></div>
                   <div className="pt-20">
-                    <p className="italic mb-4 text-lg">"{t.testimonial2}"</p>
+                    <p className="italic mb-4 text-lg">&quot;{t.testimonial2}&quot;</p>
                     <p className="font-semibold">- Jane Smith, CTO of Tech Innovations</p>
                   </div>
                 </CardContent>
@@ -392,5 +406,3 @@ export function EnterprisePageComponent() {
     </div>
   )
 }
-
-export default EnterprisePageComponent;
