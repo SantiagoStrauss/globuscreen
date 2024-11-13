@@ -322,7 +322,6 @@ export default function Page() {
           </Tabs>
         </CardContent>
       </Card>
-
       <AnimatePresence>
         {error && (
           <motion.div
@@ -338,7 +337,7 @@ export default function Page() {
             </Alert>
           </motion.div>
         )}
-
+      
         {response && response.responses?.match?.results?.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -369,10 +368,6 @@ export default function Page() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
-  )
-}
-      </AnimatePresence>
-    </div>
-  )
-}
+      </div>
+      )
+      }
