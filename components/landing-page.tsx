@@ -1,17 +1,19 @@
+// landing-page.tsx
 'use client'
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import Image from "next/image" // Added import for Next.js Image component
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { CheckCircle, Shield, Zap, Globe, Building, Landmark, Plane, ShoppingBag, Stethoscope, Umbrella, Phone, Car, GraduationCap, Wheat } from "lucide-react" // Removed BarChart, Users, Briefcase
+import { CheckCircle, Shield, Zap, Globe, Building, Landmark, Plane, ShoppingBag, Stethoscope, Umbrella, Phone, Car, GraduationCap, Wheat } from "lucide-react"
+import { TopBar } from "@/components/ui/topbar"
+import { Footer } from "@/components/ui/footer"
 
 export const runtime = 'edge';
 
 export function LandingPageComponent() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeCustomer, setActiveCustomer] = useState(0)
   const [language, setLanguage] = useState<'en' | 'es'>('en')
   const [animatedNumbers, setAnimatedNumbers] = useState({
@@ -20,13 +22,13 @@ export function LandingPageComponent() {
     globalWatchlists: 0,
   })
   const [isVisible, setIsVisible] = useState(false)
-  const statsRef = useRef<HTMLDivElement | null>(null) // Added TypeScript type
+  const statsRef = useRef<HTMLDivElement | null>(null)
   const [heroWord, setHeroWord] = useState(language === 'en' ? 'Simple' : 'Simple')
 
   const customers = [
-    { name: "GlobalBank", logo: "/placeholder.svg?height=80&width=80", quote: "GlobusScreen ha revolucionado nuestro proceso de cumplimiento." },
-    { name: "TechCorp", logo: "/placeholder.svg?height=80&width=80", quote: "Eficiente y confiable. Un cambio de juego para nuestra gestión de riesgos." },
-    { name: "MegaRetail", logo: "/placeholder.svg?height=80&width=80", quote: "Cobertura completa y fácil de usar. Altamente recomendado." },
+    { name: "GlobalBank", logo: "/placeholder.svg?height=80&width=80", quote: language === 'en' ? "GlobusScreen has revolutionized our compliance process." : "GlobusScreen ha revolucionado nuestro proceso de cumplimiento." },
+    { name: "TechCorp", logo: "/placeholder.svg?height=80&width=80", quote: language === 'en' ? "Efficient and reliable. A game-changer for our risk management." : "Eficiente y confiable. Un cambio de juego para nuestra gestión de riesgos." },
+    { name: "MegaRetail", logo: "/placeholder.svg?height=80&width=80", quote: language === 'en' ? "Comprehensive coverage and easy to use. Highly recommended." : "Cobertura completa y fácil de usar. Altamente recomendado." },
   ]
 
   const industries = [
@@ -141,7 +143,7 @@ export function LandingPageComponent() {
       { threshold: 0.1 }
     )
 
-    const currentStatsRef = statsRef.current // Stored ref in a variable
+    const currentStatsRef = statsRef.current
 
     if (currentStatsRef) {
       observer.observe(currentStatsRef)
@@ -163,11 +165,11 @@ export function LandingPageComponent() {
       let currentStep = 0
 
       const timer = setInterval(() => {
-        setAnimatedNumbers(() => ({ // Removed 'prev' as it wasn't used
+        setAnimatedNumbers({
           entitiesScreened: Math.min(Math.round((currentStep / steps) * 1000000), 1000000),
           accuracyRate: Math.min(parseFloat(((currentStep / steps) * 99.9).toFixed(1)), 99.9),
           globalWatchlists: Math.min(Math.round((currentStep / steps) * 200), 200),
-        }))
+        })
 
         currentStep++
 
@@ -192,65 +194,17 @@ export function LandingPageComponent() {
     return () => clearInterval(interval)
   }, [language])
 
+  const toggleLanguage = () => {
+    setLanguage(lang => lang === 'en' ? 'es' : 'en')
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <header className="bg-white shadow-sm">
-        <div className="container mx-auto px-4 py-4">
-          <nav className="flex justify-between items-center">
-            <div className="text-2xl font-bold text-blue-600">GlobusScreen</div>
-            <div className="hidden md:flex space-x-6">
-              <Link href="/solutions-page" className="text-gray-600 hover:text-blue-600">{t.solutions}</Link>
-              <Link href="/data-page" className="text-gray-600 hover:text-blue-600">{t.data}</Link>
-              <Link href="/pricing-page" className="text-gray-600 hover:text-blue-600">{t.pricing}</Link>
-              <Link href="/enterprise-page" className="text-gray-600 hover:text-blue-600">{t.enterprise}</Link>
-            </div>
-            <div className="hidden md:flex space-x-4 items-center">
-              <Link href="/dashboard-page" className="text-blue-600 hover:underline">
-                {t.login}
-              </Link>
-              <Button className="bg-blue-600 hover:bg-blue-700" asChild>
-                <Link href="/auth-page?mode=signup">{t.signUp}</Link>
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setLanguage(lang => lang === 'en' ? 'es' : 'en')}
-              >
-                {language === 'en' ? 'ES' : 'EN'}
-              </Button>
-            </div>
-            <div className="md:hidden flex items-center">
-              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-blue-600">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-              </button>
-            </div>
-          </nav>
-          {isMenuOpen && (
-            <div className="md:hidden mt-4 space-y-4">
-              <Link href="#" className="block text-gray-600 hover:text-blue-600">{t.solutions}</Link>
-              <Link href="#" className="block text-gray-600 hover:text-blue-600">{t.data}</Link>
-              <Link href="#" className="block text-gray-600 hover:text-blue-600">{t.pricing}</Link>
-              <Link href="#" className="block text-gray-600 hover:text-blue-600">{t.enterprise}</Link>
-              <Link href="/auth-page?mode=login" className="block text-blue-600 hover:underline">
-                {t.login}
-              </Link>
-              <Button className="block bg-blue-600 hover:bg-blue-700 w-full" asChild>
-                <Link href="/auth-page?mode=signup">{t.signUp}</Link>
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="block w-full"
-                onClick={() => setLanguage(lang => lang === 'en' ? 'es' : 'en')}
-              >
-                {language === 'en' ? 'ES' : 'EN'}
-              </Button>
-            </div>
-          )}
-        </div>
-      </header>
+      <TopBar
+        language={language}
+        toggleLanguage={toggleLanguage}
+        translations={translations}
+      />
 
       <main>
         <section className="container mx-auto px-4 py-16">
@@ -306,19 +260,18 @@ export function LandingPageComponent() {
                   }`}
                   onMouseEnter={() => setActiveCustomer(index)}
                 >
-                  {/* Replaced <img> with <Image /> */}
                   <Image
                     src={customer.logo}
                     alt={customer.name}
-                    width={80} // Set appropriate width
-                    height={80} // Set appropriate height
+                    width={80}
+                    height={80}
                     className="w-20 h-20"
                   />
                 </div>
               ))}
             </div>
             <div className="text-center">
-              <p className="text-xl italic mb-2">&quot;{customers[activeCustomer].quote}&quot;</p> {/* Escaped quotes */}
+              <p className="text-xl italic mb-2">&quot;{customers[activeCustomer].quote}&quot;</p>
               <p className="font-semibold">{customers[activeCustomer].name}</p>
             </div>
           </div>
@@ -436,42 +389,7 @@ export function LandingPageComponent() {
         </section>
       </main>
 
-      <footer className="bg-gray-800 text-white py-8">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="font-bold mb-4">GlobusScreen</h3>
-              <p className="text-sm">{t.footer.tagline}</p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">{t.footer.solutions}</h4>
-              <ul className="space-y-2">
-                <li><Link href="#" className="text-sm hover:underline">{t.individualScreening}</Link></li>
-                <li><Link href="#" className="text-sm hover:underline">{t.batchProcessing}</Link></li>
-                <li><Link href="#" className="text-sm hover:underline">{t.apiIntegration}</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">{t.footer.company}</h4>
-              <ul className="space-y-2">
-                <li><Link href="#" className="text-sm hover:underline">{t.footer.aboutUs}</Link></li>
-                <li><Link href="#" className="text-sm hover:underline">{t.footer.careers}</Link></li>
-                <li><Link href="#" className="text-sm hover:underline">{t.footer.contact}</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">{t.footer.legal}</h4>
-              <ul className="space-y-2">
-                <li><Link href="#" className="text-sm hover:underline">{t.footer.privacyPolicy}</Link></li>
-                <li><Link href="#" className="text-sm hover:underline">{t.footer.termsOfService}</Link></li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-8 pt-8 border-t border-gray-700 text-center">
-            <p>&copy; 2023 GlobusScreen. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer translations={t} />
     </div>
   )
 }

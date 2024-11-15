@@ -1,14 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Separator } from "@/components/ui/separator"
-import { ArrowRight, Database, Globe, Shield, RefreshCcw} from "lucide-react"
+import { ArrowRight, Database, Globe, Shield, RefreshCcw } from "lucide-react"
+import { TopBar } from "@/components/ui/topbar"
+import { Footer } from "@/components/ui/footer"
 import {
   LineChart,
   Line,
@@ -63,6 +63,24 @@ const translations = {
     enterprise: "Enterprise",
     login: "Log In",
     signUp: "Sign Up",
+    
+    // Nested Footer Object
+    footer: {
+      tagline: "Ensuring global compliance, one screen at a time.",
+      solutions: "Solutions",
+      company: "Company",
+      legal: "Legal",
+      aboutUs: "About Us",
+      careers: "Careers",
+      contact: "Contact",
+      privacyPolicy: "Privacy Policy",
+      termsOfService: "Terms of Service",
+    },
+    
+    // Additional Footer Properties
+    individualScreening: "Individual Screening",
+    batchProcessing: "Batch Processing",
+    apiIntegration: "API Integration",
   },
   es: {
     title: "Datos Globales Integrales",
@@ -101,6 +119,24 @@ const translations = {
     enterprise: "Empresas",
     login: "Iniciar Sesión",
     signUp: "Registrarse",
+    
+    // Nested Footer Object
+    footer: {
+      tagline: "Asegurando el cumplimiento global, una verificación a la vez.",
+      solutions: "Soluciones",
+      company: "Compañía",
+      legal: "Legal",
+      aboutUs: "Acerca de nosotros",
+      careers: "Carreras",
+      contact: "Contacto",
+      privacyPolicy: "Política de privacidad",
+      termsOfService: "Términos de servicio",
+    },
+    
+    // Additional Footer Properties
+    individualScreening: "Verificación Individual",
+    batchProcessing: "Procesamiento por Lotes",
+    apiIntegration: "Integración API",
   },
 }
 
@@ -123,9 +159,8 @@ const dataBreakdown = [
 const COLORS = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444"]
 
 export default function EnhancedDataPage() {
-  const [language, setLanguage] = useState<"en" | "es">("en") // Updated line
+  const [language, setLanguage] = useState<"en" | "es">("en")
   const [activeTab, setActiveTab] = useState("overview")
-  const [menuOpen] = useState(false)
   const { ref } = useInView({
     triggerOnce: true,
     threshold: 0.1,
@@ -144,75 +179,17 @@ export default function EnhancedDataPage() {
     </motion.div>
   )
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 via-white to-purple-50">
-      <header className="bg-white shadow-md sticky top-0 z-50">
-  <div className="container mx-auto px-4 py-4">
-    <nav className="flex justify-between items-center">
-      <Link href="/" className="text-2xl font-bold text-blue-600">
-        GlobusScreen
-      </Link>
-      <div className="hidden md:flex space-x-6">
-        <Link href="/solutions" className="text-gray-600 hover:text-blue-600 transition-colors">
-          {t.solutions}
-        </Link>
-        <Link href="/data" className="text-blue-600 font-semibold">
-          {t.data}
-        </Link>
-        <Link href="/pricing" className="text-gray-600 hover:text-blue-600 transition-colors">
-          {t.pricing}
-        </Link>
-        <Link href="#" className="text-gray-600 hover:text-blue-600 transition-colors">
-          {t.enterprise}
-        </Link>
-      </div>
-      <div className="space-x-4 flex items-center">
-        <Link href="/auth" className="text-blue-600 hover:underline">
-          {t.login}
-        </Link>
-        <Button className="bg-blue-600 hover:bg-blue-700">
-          {t.signUp}
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setLanguage(lang => (lang === "en" ? "es" : "en"))}
-        >
-          {language === "en" ? "ES" : "EN"}
-        </Button>
-      </div>
-    </nav>
-  </div>
-</header>
+  const toggleLanguage = () => {
+    setLanguage(lang => lang === 'en' ? 'es' : 'en')
+  }
 
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="md:hidden bg-white shadow-lg absolute top-16 left-0 right-0 z-40"
-          >
-            <nav className="flex flex-col p-4">
-              <Link href="/solutions" className="py-2 text-gray-600 hover:text-blue-600 transition-colors">
-                {t.solutions}
-              </Link>
-              <Link href="/data" className="py-2 text-blue-600 font-semibold">
-                {t.data}
-              </Link>
-              <Link href="/pricing" className="py-2 text-gray-600 hover:text-blue-600 transition-colors">
-                {t.pricing}
-              </Link>
-              <Link href="#" className="py-2 text-gray-600 hover:text-blue-600 transition-colors">
-                {t.enterprise}
-              </Link>
-              <Separator className="my-2" />
-              <Button variant="outline" className="mb-2">{t.login}</Button>
-              <Button>{t.signUp}</Button>
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+      <TopBar
+        language={language}
+        toggleLanguage={toggleLanguage}
+        translations={translations}
+      />
 
       <main className="container mx-auto px-4 py-16">
         <section className="text-center mb-24">
@@ -427,85 +404,7 @@ export default function EnhancedDataPage() {
         </section>
       </main>
 
-      <footer className="bg-gray-800 text-white py-16 mt-24">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-12">
-            <div>
-              <h3 className="font-bold text-2xl mb-4 flex items-center">
-                <Globe className="mr-2" />
-                GlobusScreen
-              </h3>
-              <p className="text-gray-400">
-                {language === "en"
-                  ? "Ensuring global compliance, one screen at a time."
-                  : "Asegurando el cumplimiento global, una verificación a la vez."}
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold text-lg mb-4">{t.solutions}</h4>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/solutions" className="text-gray-400 hover:text-white transition-colors">
-                    {t.solutions}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/data" className="text-gray-400 hover:text-white transition-colors">
-                    {t.data}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/pricing" className="text-gray-400 hover:text-white transition-colors">
-                    {t.pricing}
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-lg mb-4">
-                {language === "en" ? "Company" : "Empresa"}
-              </h4>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                    {language === "en" ? "About Us" : "Sobre Nosotros"}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                    {language === "en" ? "Careers" : "Carreras"}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                    {language === "en" ? "Contact" : "Contacto"}
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold text-lg mb-4">
-                {language === "en" ? "Legal" : "Legal"}
-              </h4>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                    {language === "en" ? "Privacy Policy" : "Política de Privacidad"}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                    {language === "en" ? "Terms of Service" : "Términos de Servicio"}
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-12 pt-8 border-t border-gray-700 text-center">
-            <p>&copy; 2023 GlobusScreen. {language === "en" ? "All rights reserved." : "Todos los derechos reservados."}</p>
-          </div>
-        </div>
-      </footer>
+      <Footer translations={translations[language]} />
     </div>
   )
 }

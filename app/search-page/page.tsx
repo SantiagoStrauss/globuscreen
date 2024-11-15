@@ -11,15 +11,16 @@ import { Loader2, AlertCircle, CheckCircle2, User, Building2 } from "lucide-reac
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export const runtime = 'edge';
-
+////111111
 // Define types for the API request and response
 interface PersonQuery {
   queries: {
     match: {
       schema: "Person"
       properties: {
-        name: string[]
-        nationality: string[]
+        name?: string[]
+        nationality?: string[]
+        idNumber?: string[]   
       }
     }
   }
@@ -30,8 +31,8 @@ interface CompanyQuery {
     match: {
       schema: "Company"
       properties: {
-        name: string[]
-        jurisdiction: string[]
+        name?: string[]
+        jurisdiction?: string[]
       }
     }
   }
@@ -134,7 +135,8 @@ export default function Page() {
   // Form states
   const [personForm, setPersonForm] = useState({
     name: '',
-    nationality: ''
+    nationality: '',
+    idNumber: ''
   })
   const [companyForm, setCompanyForm] = useState({
     name: '',
@@ -143,26 +145,37 @@ export default function Page() {
 
   const createRequestBody = (): PersonQuery | CompanyQuery => {
     if (searchType === 'person') {
+      const properties: PersonQuery["queries"]["match"]["properties"] = {}
+      if (personForm.name.trim()) {
+        properties.name = [personForm.name.trim()]
+      }
+      if (personForm.nationality.trim()) {
+        properties.nationality = [personForm.nationality.trim()]
+      }
+      if (personForm.idNumber.trim()) {
+        properties.idNumber = [personForm.idNumber.trim()] // Removed parseInt
+      }
       return {
         queries: {
           match: {
             schema: "Person",
-            properties: {
-              name: [personForm.name],
-              nationality: [personForm.nationality]
-            }
+            properties
           }
         }
       }
     } else {
+      const properties: CompanyQuery["queries"]["match"]["properties"] = {}
+      if (companyForm.name.trim()) {
+        properties.name = [companyForm.name.trim()]
+      }
+      if (companyForm.jurisdiction.trim()) {
+        properties.jurisdiction = [companyForm.jurisdiction.trim()]
+      }
       return {
         queries: {
           match: {
             schema: "Company",
-            properties: {
-              name: [companyForm.name],
-              jurisdiction: [companyForm.jurisdiction]
-            }
+            properties
           }
         }
       }
@@ -207,9 +220,9 @@ export default function Page() {
 
   const isFormValid = () => {
     if (searchType === 'person') {
-      return personForm.name.trim() && personForm.nationality.trim()
+      return personForm.name.trim() || personForm.nationality.trim() || personForm.idNumber.trim()
     } else {
-      return companyForm.name.trim() && companyForm.jurisdiction.trim()
+      return companyForm.name.trim() || companyForm.jurisdiction.trim()
     }
   }
 
@@ -253,6 +266,16 @@ export default function Page() {
                     placeholder="e.g., Colombia"
                     value={personForm.nationality}
                     onChange={(e) => setPersonForm({ ...personForm, nationality: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="idNumber">ID Number</Label>
+                  <Input
+                    id="idNumber"
+                    type="text" // Changed to text
+                    placeholder="e.g., 123456"
+                    value={personForm.idNumber}
+                    onChange={(e) => setPersonForm({ ...personForm, idNumber: e.target.value })}
                   />
                 </div>
                 <Button 
@@ -299,7 +322,6 @@ export default function Page() {
           </Tabs>
         </CardContent>
       </Card>
-
       <AnimatePresence>
         {error && (
           <motion.div
@@ -315,7 +337,7 @@ export default function Page() {
             </Alert>
           </motion.div>
         )}
-
+      
         {response && response.responses?.match?.results?.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -346,6 +368,6 @@ export default function Page() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
-  )
-}
+      </div>
+      )
+      }

@@ -1,17 +1,75 @@
 "use client"
 
 import React, { useState } from "react"
-import Link from "next/link"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Switch } from "@/components/ui/switch"
 import { ArrowRight, Check, X, Zap, Users, Globe } from "lucide-react"
+import { TopBar } from "@/components/ui/topbar"
+import { Footer } from "@/components/ui/footer"
 
 export const runtime = 'edge';
 
-const translations = {
+interface FooterTranslations {
+  tagline: string;
+  solutions: string;
+  company: string;
+  legal: string;
+  aboutUs: string;
+  careers: string;
+  contact: string;
+  privacyPolicy: string;
+  termsOfService: string;
+}
+
+interface Translation {
+  title: string;
+  subtitle: string;
+  monthlyBilling: string;
+  annualBilling: string;
+  saveText: string;
+  getStarted: string;
+  contactSales: string;
+  mostPopular: string;
+  basic: string;
+  pro: string;
+  enterprise: string;
+  perMonth: string;
+  billed: string;
+  basicDescription: string;
+  proDescription: string;
+  enterpriseDescription: string;
+  features: string;
+  customQuote: string;
+  solutions: string;
+  data: string;
+  pricing: string;
+  login: string;
+  signUp: string;
+  footerSolutions: string;
+  footerCompany: string;
+  footerLegal: string;
+  footerAboutUs: string;
+  footerCareers: string;
+  footerContact: string;
+  footerPrivacy: string;
+  footerTerms: string;
+  footerCopyright: string;
+  footerDescription: string;
+  footer: FooterTranslations;
+  individualScreening: string;
+  batchProcessing: string;
+  apiIntegration: string;
+}
+
+interface TranslationsType {
+  en: Translation;
+  es: Translation;
+}
+
+const translations: TranslationsType = {
   en: {
     title: "Transparent Pricing for Every Business",
     subtitle: "Choose the plan that fits your needs",
@@ -45,7 +103,21 @@ const translations = {
     footerPrivacy: "Privacy Policy",
     footerTerms: "Terms of Service",
     footerCopyright: "All rights reserved.",
-    footerDescription: "Ensuring global compliance, one screen at a time."
+    footerDescription: "Ensuring global compliance, one screen at a time.",
+    footer: {
+      tagline: "Ensuring global compliance, one screen at a time.",
+      solutions: "Solutions",
+      company: "Company",
+      legal: "Legal",
+      aboutUs: "About Us",
+      careers: "Careers",
+      contact: "Contact",
+      privacyPolicy: "Privacy Policy",
+      termsOfService: "Terms of Service",
+    },
+    individualScreening: "Individual Screening",
+    batchProcessing: "Batch Processing",
+    apiIntegration: "API Integration",
   },
   es: {
     title: "Precios Transparentes para Cada Negocio",
@@ -80,8 +152,22 @@ const translations = {
     footerPrivacy: "Política de privacidad",
     footerTerms: "Términos de servicio",
     footerCopyright: "Todos los derechos reservados.",
-    footerDescription: "Asegurando el cumplimiento global, una verificación a la vez."
-  }
+    footerDescription: "Asegurando el cumplimiento global, una verificación a la vez.",
+    footer: {
+      tagline: "Asegurando el cumplimiento global, una verificación a la vez.",
+      solutions: "Soluciones",
+      company: "Compañía",
+      legal: "Legal",
+      aboutUs: "Acerca de nosotros",
+      careers: "Carreras",
+      contact: "Contacto",
+      privacyPolicy: "Política de privacidad",
+      termsOfService: "Términos de servicio",
+    },
+    individualScreening: "Verificación Individual",
+    batchProcessing: "Procesamiento por Lotes",
+    apiIntegration: "Integración API",
+  },
 }
 
 const pricingPlans = [
@@ -130,46 +216,17 @@ export default function PricingPageComponent() {
 
   const t = translations[language]
 
+  const toggleLanguage = () => {
+    setLanguage(lang => lang === 'en' ? 'es' : 'en')
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <header className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
-          <nav className="flex justify-between items-center">
-            <Link href="/" className="text-2xl font-bold text-blue-600">
-              GlobusScreen
-            </Link>
-            <div className="hidden md:flex space-x-6">
-              <Link href="/solutions" className="text-gray-600 hover:text-blue-600">
-                {t.solutions}
-              </Link>
-              <Link href="/data" className="text-gray-600 hover:text-blue-600">
-                {t.data}
-              </Link>
-              <Link href="/pricing" className="text-blue-600 font-semibold">
-                {t.pricing}
-              </Link>
-              <Link href="#" className="text-gray-600 hover:text-blue-600">
-                {t.enterprise}
-              </Link>
-            </div>
-            <div className="space-x-4 flex items-center">
-              <Link href="/auth" className="text-blue-600 hover:underline">
-                {t.login}
-              </Link>
-              <Button className="bg-blue-600 hover:bg-blue-700">
-                {t.signUp}
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setLanguage(lang => lang === 'en' ? 'es' : 'en')}
-              >
-                {language === 'en' ? 'ES' : 'EN'}
-              </Button>
-            </div>
-          </nav>
-        </div>
-      </header>
+      <TopBar
+        language={language}
+        toggleLanguage={toggleLanguage}
+        translations={translations}
+      />
 
       <main className="container mx-auto px-4 py-16">
         <section className="text-center mb-16">
@@ -315,42 +372,7 @@ export default function PricingPageComponent() {
         </section>
       </main>
 
-      <footer className="bg-gray-800 text-white py-8">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="font-bold mb-4">GlobusScreen</h3>
-              <p className="text-sm">{t.footerDescription}</p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">{t.footerSolutions}</h4>
-              <ul className="space-y-2">
-                <li><Link href="/solutions" className="text-sm hover:underline">{t.solutions}</Link></li>
-                <li><Link href="/data" className="text-sm hover:underline">{t.data}</Link></li>
-                <li><Link href="/pricing" className="text-sm hover:underline">{t.pricing}</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">{t.footerCompany}</h4>
-              <ul className="space-y-2">
-                <li><Link href="#" className="text-sm hover:underline">{t.footerAboutUs}</Link></li>
-                <li><Link href="#" className="text-sm hover:underline">{t.footerCareers}</Link></li>
-                <li><Link href="#" className="text-sm hover:underline">{t.footerContact}</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">{t.footerLegal}</h4>
-              <ul className="space-y-2">
-                <li><Link href="#" className="text-sm hover:underline">{t.footerPrivacy}</Link></li>
-                <li><Link href="#" className="text-sm hover:underline">{t.footerTerms}</Link></li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-8 pt-8 border-t border-gray-700 text-center">
-            <p>&copy; 2023 GlobusScreen. {t.footerCopyright}</p>
-          </div>
-        </div>
-      </footer>
+      <Footer translations={translations[language]} />
     </div>
   )
 }

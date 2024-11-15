@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import dynamic from "next/dynamic"
-import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import { Button } from "@/components/ui/button"
@@ -11,108 +10,133 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { ArrowRight, CheckCircle, Shield, Globe, Users, Briefcase, Building, Search, Database, Lock } from "lucide-react"
-
+import { TopBar } from "@/components/ui/topbar"
+import { Footer } from "@/components/ui/footer"
 
 export const runtime = 'edge';
 
 const translations = {
-    en: {
-      title: "Advanced Screening Solutions",
-      subtitle: "Cutting-edge technology for comprehensive sanctions list screening",
-      trustedBy: "Trusted by 500+ Global Companies",
-      cuttingEdgeFeatures: "Cutting-Edge Features",
-      industriesWeServe: "Industries We Serve",
-      faq: "Frequently Asked Questions",
-      readyToRevolutionize: "Ready to revolutionize your compliance process?",
-      startFreeTrial: "Start your free trial today and experience the power of GlobusScreen",
-      startFreeTrialButton: "Start Free Trial",
-      solutionsTitleIndividual: "Individual Screening",
-      solutionsTitleBatch: "Batch Processing",
-      solutionsTitleAPI: "API Integration",
-      solutionsDescriptionIndividual: "Quick and accurate screening for individual entities",
-      solutionsDescriptionBatch: "Efficient screening for large datasets",
-      solutionsDescriptionAPI: "Seamless integration with your existing systems",
-      solutionsFeatureInstant: "Instant results",
-      solutionsFeatureDetailed: "Detailed match information",
-      solutionsFeatureUserFriendly: "User-friendly interface",
-      solutionsFeatureUpload: "Upload CSV or Excel files",
-      solutionsFeatureProcess: "Process thousands of entries",
-      solutionsFeatureDownloadable: "Downloadable results",
-      solutionsFeatureREST: "RESTful API",
-      solutionsFeatureWebhooks: "Webhooks for real-time updates",
-      solutionsFeatureDocumentation: "Comprehensive documentation",
-      footerSolutions: "Solutions",
-      footerCompany: "Company",
-      footerLegal: "Legal",
-      footerAboutUs: "About Us",
-      footerCareers: "Careers",
-      footerContact: "Contact",
-      footerPrivacy: "Privacy Policy",
-      footerTerms: "Terms of Service",
-      footerCopyright: "All rights reserved.",
-      faqQuestionAccuracy: "How accurate is GlobusScreen's matching algorithm?",
-      faqAnswerAccuracy: "Our AI-powered matching algorithm boasts a 99.9% accuracy rate, significantly reducing false positives while ensuring comprehensive coverage of potential matches.",
-      faqQuestionIntegration: "Can GlobusScreen integrate with my existing compliance systems?",
-      faqAnswerIntegration: "Yes, GlobusScreen offers seamless integration through our RESTful API and webhooks, allowing you to incorporate our powerful screening capabilities into your existing compliance workflow.",
-      faqQuestionUpdates: "How often is the sanctions database updated?",
-      faqAnswerUpdates: "Our global sanctions and watchlists database is updated in real-time, ensuring that you always have access to the most current information for your screening needs.",
-      footerDescription: "Ensuring global compliance, one screen at a time.",
-      data: "Data",
-      pricing: "Pricing",
-      enterprise: "Enterprise",
-      login: "Log In",
-      signUp: "Sign Up",
-      solutions: "Solutions"
+  en: {
+    title: "Advanced Screening Solutions",
+    subtitle: "Cutting-edge technology for comprehensive sanctions list screening",
+    trustedBy: "Trusted by 500+ Global Companies",
+    cuttingEdgeFeatures: "Cutting-Edge Features",
+    industriesWeServe: "Industries We Serve",
+    faq: "Frequently Asked Questions",
+    readyToRevolutionize: "Ready to revolutionize your compliance process?",
+    startFreeTrial: "Start your free trial today and experience the power of GlobusScreen",
+    startFreeTrialButton: "Start Free Trial",
+    solutionsTitleIndividual: "Individual Screening",
+    solutionsTitleBatch: "Batch Processing",
+    solutionsTitleAPI: "API Integration",
+    solutionsDescriptionIndividual: "Quick and accurate screening for individual entities",
+    solutionsDescriptionBatch: "Efficient screening for large datasets",
+    solutionsDescriptionAPI: "Seamless integration with your existing systems",
+    solutionsFeatureInstant: "Instant results",
+    solutionsFeatureDetailed: "Detailed match information",
+    solutionsFeatureUserFriendly: "User-friendly interface",
+    solutionsFeatureUpload: "Upload CSV or Excel files",
+    solutionsFeatureProcess: "Process thousands of entries",
+    solutionsFeatureDownloadable: "Downloadable results",
+    solutionsFeatureREST: "RESTful API",
+    solutionsFeatureWebhooks: "Webhooks for real-time updates",
+    solutionsFeatureDocumentation: "Comprehensive documentation",
+    
+    // Nested Footer Object
+    footer: {
+      tagline: "Ensuring global compliance, one screen at a time.",
+      solutions: "Solutions",
+      company: "Company",
+      legal: "Legal",
+      aboutUs: "About Us",
+      careers: "Careers",
+      contact: "Contact",
+      privacyPolicy: "Privacy Policy",
+      termsOfService: "Terms of Service",
     },
-    es: {
-      title: "Soluciones Avanzadas de Verificación",
-      subtitle: "Tecnología de vanguardia para una verificación exhaustiva de listas de sanciones",
-      trustedBy: "Confiado por más de 500 empresas globales",
-      cuttingEdgeFeatures: "Características de Vanguardia",
-      industriesWeServe: "Industrias que Servimos",
-      faq: "Preguntas Frecuentes",
-      readyToRevolutionize: "¿Listo para revolucionar su proceso de cumplimiento?",
-      startFreeTrial: "Comience su prueba gratuita hoy y experimente el poder de GlobusScreen",
-      startFreeTrialButton: "Iniciar Prueba Gratuita",
-      solutionsTitleIndividual: "Verificación Individual",
-      solutionsTitleBatch: "Procesamiento por Lotes",
-      solutionsTitleAPI: "Integración API",
-      solutionsDescriptionIndividual: "Verificación rápida y precisa para entidades individuales",
-      solutionsDescriptionBatch: "Procesamiento eficiente para grandes conjuntos de datos",
-      solutionsDescriptionAPI: "Integración perfecta con sus sistemas existentes",
-      solutionsFeatureInstant: "Resultados instantáneos",
-      solutionsFeatureDetailed: "Información detallada de coincidencias",
-      solutionsFeatureUserFriendly: "Interfaz fácil de usar",
-      solutionsFeatureUpload: "Cargar archivos CSV o Excel",
-      solutionsFeatureProcess: "Procesar miles de entradas",
-      solutionsFeatureDownloadable: "Resultados descargables",
-      solutionsFeatureREST: "API RESTful",
-      solutionsFeatureWebhooks: "Webhooks para actualizaciones en tiempo real",
-      solutionsFeatureDocumentation: "Documentación completa",
-      footerSolutions: "Soluciones",
-      footerCompany: "Compañía",
-      footerLegal: "Legal",
-      footerAboutUs: "Acerca de nosotros",
-      footerCareers: "Carreras",
-      footerContact: "Contacto",
-      footerPrivacy: "Política de privacidad",
-      footerTerms: "Términos de servicio",
-      footerCopyright: "Todos los derechos reservados.",
-      faqQuestionAccuracy: "¿Qué tan preciso es el algoritmo de coincidencia de GlobusScreen?",
-      faqAnswerAccuracy: "Nuestro algoritmo de coincidencia impulsado por IA tiene una tasa de precisión del 99.9%, reduciendo significativamente los falsos positivos mientras asegura una cobertura completa de posibles coincidencias.",
-      faqQuestionIntegration: "¿Puede GlobusScreen integrarse con mis sistemas de cumplimiento existentes?",
-      faqAnswerIntegration: "Sí, GlobusScreen ofrece una integración perfecta a través de nuestra API RESTful y webhooks, lo que le permite incorporar nuestras potentes capacidades de verificación en su flujo de trabajo de cumplimiento existente.",
-      faqQuestionUpdates: "¿Con qué frecuencia se actualiza la base de datos de sanciones?",
-      faqAnswerUpdates: "Nuestra base de datos global de sanciones y listas de vigilancia se actualiza en tiempo real, lo que garantiza que siempre tenga acceso a la información más reciente para sus necesidades de verificación.",
-      footerDescription: "Asegurando el cumplimiento global, una verificación a la vez.",
-      data: "Datos",
-      pricing: "Precios",
-      enterprise: "Empresas",
-      login: "Iniciar sesión",
-      signUp: "Registrarse",
-      solutions: "Soluciones"
-    }
-  };
+    
+    // Additional Footer Properties
+    individualScreening: "Individual Screening",
+    batchProcessing: "Batch Processing",
+    apiIntegration: "API Integration",
+    
+    footerCopyright: "All rights reserved.",
+    
+    faqQuestionAccuracy: "How accurate is GlobusScreen's matching algorithm?",
+    faqAnswerAccuracy: "Our AI-powered matching algorithm boasts a 99.9% accuracy rate, significantly reducing false positives while ensuring comprehensive coverage of potential matches.",
+    faqQuestionIntegration: "Can GlobusScreen integrate with my existing compliance systems?",
+    faqAnswerIntegration: "Yes, GlobusScreen offers seamless integration through our RESTful API and webhooks, allowing you to incorporate our powerful screening capabilities into your existing compliance workflow.",
+    faqQuestionUpdates: "How often is the sanctions database updated?",
+    faqAnswerUpdates: "Our global sanctions and watchlists database is updated in real-time, ensuring that you always have access to the most current information for your screening needs.",
+    
+    data: "Data",
+    pricing: "Pricing",
+    enterprise: "Enterprise",
+    login: "Log In",
+    signUp: "Sign Up",
+    solutions: "Solutions"
+  },
+  es: {
+    title: "Soluciones Avanzadas de Verificación",
+    subtitle: "Tecnología de vanguardia para una verificación exhaustiva de listas de sanciones",
+    trustedBy: "Confiado por más de 500 empresas globales",
+    cuttingEdgeFeatures: "Características de Vanguardia",
+    industriesWeServe: "Industrias que Servimos",
+    faq: "Preguntas Frecuentes",
+    readyToRevolutionize: "¿Listo para revolucionar su proceso de cumplimiento?",
+    startFreeTrial: "Comience su prueba gratuita hoy y experimente el poder de GlobusScreen",
+    startFreeTrialButton: "Iniciar Prueba Gratuita",
+    solutionsTitleIndividual: "Verificación Individual",
+    solutionsTitleBatch: "Procesamiento por Lotes",
+    solutionsTitleAPI: "Integración API",
+    solutionsDescriptionIndividual: "Verificación rápida y precisa para entidades individuales",
+    solutionsDescriptionBatch: "Procesamiento eficiente para grandes conjuntos de datos",
+    solutionsDescriptionAPI: "Integración perfecta con sus sistemas existentes",
+    solutionsFeatureInstant: "Resultados instantáneos",
+    solutionsFeatureDetailed: "Información detallada de coincidencias",
+    solutionsFeatureUserFriendly: "Interfaz fácil de usar",
+    solutionsFeatureUpload: "Cargar archivos CSV o Excel",
+    solutionsFeatureProcess: "Procesar miles de entradas",
+    solutionsFeatureDownloadable: "Resultados descargables",
+    solutionsFeatureREST: "API RESTful",
+    solutionsFeatureWebhooks: "Webhooks para actualizaciones en tiempo real",
+    solutionsFeatureDocumentation: "Documentación completa",
+    
+    // Nested Footer Object
+    footer: {
+      tagline: "Asegurando el cumplimiento global, una verificación a la vez.",
+      solutions: "Soluciones",
+      company: "Compañía",
+      legal: "Legal",
+      aboutUs: "Acerca de nosotros",
+      careers: "Carreras",
+      contact: "Contacto",
+      privacyPolicy: "Política de privacidad",
+      termsOfService: "Términos de servicio",
+    },
+    
+    // Additional Footer Properties
+    individualScreening: "Verificación Individual",
+    batchProcessing: "Procesamiento por Lotes",
+    apiIntegration: "Integración API",
+    
+    footerCopyright: "Todos los derechos reservados.",
+    
+    faqQuestionAccuracy: "¿Qué tan preciso es el algoritmo de coincidencia de GlobusScreen?",
+    faqAnswerAccuracy: "Nuestro algoritmo de coincidencia impulsado por IA tiene una tasa de precisión del 99.9%, reduciendo significativamente los falsos positivos mientras asegura una cobertura completa de posibles coincidencias.",
+    faqQuestionIntegration: "¿Puede GlobusScreen integrarse con mis sistemas de cumplimiento existentes?",
+    faqAnswerIntegration: "Sí, GlobusScreen ofrece una integración perfecta a través de nuestra API RESTful y webhooks, lo que le permite incorporar nuestras potentes capacidades de verificación en su flujo de trabajo de cumplimiento existente.",
+    faqQuestionUpdates: "¿Con qué frecuencia se actualiza la base de datos de sanciones?",
+    faqAnswerUpdates: "Nuestra base de datos global de sanciones y listas de vigilancia se actualiza en tiempo real, lo que garantiza que siempre tenga acceso a la información más reciente para sus necesidades de verificación.",
+    
+    data: "Datos",
+    pricing: "Precios",
+    enterprise: "Empresas",
+    login: "Iniciar sesión",
+    signUp: "Registrarse",
+    solutions: "Soluciones"
+  }
+};
 
 const SolutionsPageComponent = () => {
   const [activeTab, setActiveTab] = useState("individual")
@@ -197,46 +221,17 @@ const SolutionsPageComponent = () => {
     },
   ]
 
+  const toggleLanguage = () => {
+    setLanguage(lang => lang === 'en' ? 'es' : 'en')
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <header className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
-          <nav className="flex justify-between items-center">
-            <Link href="/" className="text-2xl font-bold text-blue-600">
-              GlobusScreen
-            </Link>
-            <div className="hidden md:flex space-x-6">
-              <Link href="/solutions" className="text-blue-600 font-semibold">
-                {translations[language].solutions}
-              </Link>
-              <Link href="#" className="text-gray-600 hover:text-blue-600">
-                {translations[language].data}
-              </Link>
-              <Link href="#" className="text-gray-600 hover:text-blue-600">
-                {translations[language].pricing}
-              </Link>
-              <Link href="#" className="text-gray-600 hover:text-blue-600">
-                {translations[language].enterprise}
-              </Link>
-            </div>
-            <div className="space-x-4 flex items-center">
-              <Link href="/auth" className="text-blue-600 hover:underline">
-                {translations[language].login}
-              </Link>
-              <Button className="bg-blue-600 hover:bg-blue-700">
-                {translations[language].signUp}
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setLanguage(lang => lang === 'en' ? 'es' : 'en')}
-              >
-                {language === 'en' ? 'ES' : 'EN'}
-              </Button>
-            </div>
-          </nav>
-        </div>
-      </header>
+      <TopBar
+        language={language}
+        toggleLanguage={toggleLanguage}
+        translations={translations}
+      />
 
       <main className="container mx-auto px-4 py-16">
         <section className="text-center mb-16">
@@ -381,44 +376,8 @@ const SolutionsPageComponent = () => {
             <ArrowRight className="ml-2" />
           </Button>
         </section>
-
-        <footer className="bg-gray-800 text-white py-8">
-          <div className="container mx-auto px-4">
-            <div className="grid md:grid-cols-4 gap-8">
-              <div>
-                <h3 className="font-bold mb-4">GlobusScreen</h3>
-                <p className="text-sm">{translations[language].footerDescription}</p>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-4">{translations[language].footerSolutions}</h4>
-                <ul className="space-y-2">
-                  <li><Link href="#" className="text-sm hover:underline">{translations[language].solutionsTitleIndividual}</Link></li>
-                  <li><Link href="#" className="text-sm hover:underline">{translations[language].solutionsTitleBatch}</Link></li>
-                  <li><Link href="#" className="text-sm hover:underline">{translations[language].solutionsTitleAPI}</Link></li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-4">{translations[language].footerCompany}</h4>
-                <ul className="space-y-2">
-                  <li><Link href="#" className="text-sm hover:underline">{translations[language].footerAboutUs}</Link></li>
-                  <li><Link href="#" className="text-sm hover:underline">{translations[language].footerCareers}</Link></li>
-                  <li><Link href="#" className="text-sm hover:underline">{translations[language].footerContact}</Link></li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="font-semibold mb-4">{translations[language].footerLegal}</h4>
-                <ul className="space-y-2">
-                  <li><Link href="#" className="text-sm hover:underline">{translations[language].footerPrivacy}</Link></li>
-                  <li><Link href="#" className="text-sm hover:underline">{translations[language].footerTerms}</Link></li>
-                </ul>
-              </div>
-            </div>
-            <div className="mt-8 pt-8 border-t border-gray-700 text-center">
-              <p>&copy; 2023 GlobusScreen. {translations[language].footerCopyright}</p>
-            </div>
-          </div>
-        </footer>
       </main>
+      <Footer translations={translations[language]} />
     </div>
   )
 }

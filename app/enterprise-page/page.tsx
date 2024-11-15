@@ -1,17 +1,22 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Link from "next/link"
 import { motion, useAnimation } from "framer-motion"
 import { useInView } from "react-intersection-observer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowRight, Shield, Zap, Globe, Users, Briefcase, Building, BarChart, Cog, Headphones } from "lucide-react"
+import { 
+  ArrowRight, Shield, Zap, Globe, Users, Briefcase, Building, 
+  BarChart, Cog, Headphones 
+} from "lucide-react"
 import confetti from 'canvas-confetti'
+import { TopBar } from "@/components/ui/topbar"
+import { Footer } from "@/components/ui/footer"
 
+// ... rest of your code
 export const runtime = 'edge';
 
-type TranslationKey = keyof typeof translations["en"];
+type TranslationKey = keyof typeof translations["en"]
 const translations = {
   en: {
     title: "Enterprise-Grade Compliance Solutions",
@@ -48,17 +53,22 @@ const translations = {
     enterprise: "Enterprise",
     login: "Log In",
     signUp: "Sign Up",
-    footerSolutions: "Solutions",
-    footerCompany: "Company",
-    footerLegal: "Legal",
-    footerAboutUs: "About Us",
-    footerCareers: "Careers",
-    footerContact: "Contact",
-    footerPrivacy: "Privacy Policy",
-    footerTerms: "Terms of Service",
+    individualScreening: "Individual Screening",
+    batchProcessing: "Batch Processing",
+    apiIntegration: "API Integration",
+    footer: {
+      tagline: "Ensuring global compliance, one screen at a time.",
+      solutions: "Solutions",
+      company: "Company",
+      legal: "Legal",
+      aboutUs: "About Us",
+      careers: "Careers",
+      contact: "Contact",
+      privacyPolicy: "Privacy Policy",
+      termsOfService: "Terms of Service",
+    },
     footerCopyright: "All rights reserved.",
-    footerDescription: "Ensuring global compliance, one screen at a time.",
-    exploreFeature: "Explore Feature"
+    exploreFeature: "Explore Feature",
   },
   es: {
     title: "Soluciones de Cumplimiento de Nivel Empresarial",
@@ -95,26 +105,33 @@ const translations = {
     enterprise: "Empresas",
     login: "Iniciar Sesión",
     signUp: "Registrarse",
-    footerSolutions: "Soluciones",
-    footerCompany: "Compañía",
-    footerLegal: "Legal",
-    footerAboutUs: "Acerca de Nosotros",
-    footerCareers: "Carreras",
-    footerContact: "Contacto",
-    footerPrivacy: "Política de Privacidad",
-    footerTerms: "Términos de Servicio",
+    individualScreening: "Evaluación Individual",
+    batchProcessing: "Procesamiento por Lotes",
+    apiIntegration: "Integración API",
+    footer: {
+      tagline: "Asegurando el cumplimiento global, una verificación a la vez.",
+      solutions: "Soluciones",
+      company: "Compañía",
+      legal: "Legal",
+      aboutUs: "Acerca de Nosotros",
+      careers: "Carreras",
+      contact: "Contacto",
+      privacyPolicy: "Política de Privacidad",
+      termsOfService: "Términos de Servicio",
+    },
     footerCopyright: "Todos los derechos reservados.",
-    footerDescription: "Asegurando el cumplimiento global, una verificación a la vez.",
-    exploreFeature: "Explorar Característica"
+    exploreFeature: "Explorar Funcionalidad",
   }
 }
 
 interface Feature {
-  icon: React.ComponentType<{ className?: string }>;
-  key: keyof Pick<typeof translations["en"], 
+  icon: React.ComponentType<{ className?: string }>
+  key: keyof Pick<
+    typeof translations["en"],
     "customization" | "security" | "integration" | 
-    "analytics" | "support" | "scalability">;
-  color: string;
+    "analytics" | "support" | "scalability"
+  >
+  color: string
 }
 
 const features: Feature[] = [
@@ -127,9 +144,12 @@ const features: Feature[] = [
 ]
 
 interface Industry {
-  icon: React.ComponentType<{ className?: string }>;
-  key: TranslationKey;
-}
+    icon: React.ComponentType<{ className?: string }>;
+    key: keyof Pick<
+      typeof translations["en"],
+      "banking" | "finance" | "insurance" | "healthcare" | "technology" | "government"
+    >;
+  }
 
 const industries: Industry[] = [
   { icon: Building, key: "banking" },
@@ -141,79 +161,50 @@ const industries: Industry[] = [
 ]
 
 export default function EnterprisePageComponent() {
-  const [language, setLanguage] = useState<"en" | "es">("en");
-  const [activeFeature, setActiveFeature] = useState<TranslationKey | null>(null);
+  const [language, setLanguage] = useState<"en" | "es">("en")
+  const [activeFeature, setActiveFeature] = useState<TranslationKey | null>(null)
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1,
-  });
+  })
 
-  const controls = useAnimation();
+  const controls = useAnimation()
 
   useEffect(() => {
     if (inView) {
       controls.start(i => ({
         opacity: 1,
         y: 0,
-        transition: { delay: i * 0.1 }
-      }));
+        transition: { delay: i * 0.1 },
+      }))
     }
-  }, [controls, inView]);
+  }, [controls, inView])
 
-  const t = translations[language];
+  const t = translations[language]
 
-  // Update the handleFeatureClick function with the explicit type
   const handleFeatureClick = (key: TranslationKey) => {
-    setActiveFeature(activeFeature === key ? null : key);
+    setActiveFeature(activeFeature === key ? null : key)
     confetti({
       particleCount: 100,
       spread: 70,
-      origin: { y: 0.6 }
-    });
-  };
+      origin: { y: 0.6 },
+    })
+  }
+
+  const toggleLanguage = () => {
+    setLanguage(lang => (lang === "en" ? "es" : "en"))
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
-      <header className="bg-white shadow-sm sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
-          <nav className="flex justify-between items-center">
-            <Link href="/" className="text-2xl font-bold text-blue-600">
-              GlobusScreen
-            </Link>
-            <div className="hidden md:flex space-x-6">
-              <Link href="/solutions" className="text-gray-600 hover:text-blue-600">
-                {t.solutions}
-              </Link>
-              <Link href="/data" className="text-gray-600 hover:text-blue-600">
-                {t.data}
-              </Link>
-              <Link href="/pricing" className="text-gray-600 hover:text-blue-600">
-                {t.pricing}
-              </Link>
-              <Link href="/enterprise" className="text-blue-600 font-semibold">
-                {t.enterprise}
-              </Link>
-            </div>
-            <div className="space-x-4 flex items-center">
-              <Link href="/auth" className="text-blue-600 hover:underline">
-                {t.login}
-              </Link>
-              <Button className="bg-blue-600 hover:bg-blue-700">
-                {t.signUp}
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setLanguage(lang => lang === 'en' ? 'es' : 'en')}
-              >
-                {language === 'en' ? 'ES' : 'EN'}
-              </Button>
-            </div>
-          </nav>
-        </div>
-      </header>
+      <TopBar
+        language={language}
+        toggleLanguage={toggleLanguage}
+        translations={translations}
+      />
 
       <main className="container mx-auto px-4 py-16">
+        {/* ...Your existing content like sections, features, industries, testimonials... */}
         <section className="text-center mb-16">
           <motion.h1
             className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600"
@@ -291,7 +282,6 @@ export default function EnterprisePageComponent() {
             ))}
           </div>
         </section>
-
         <section className="mb-16">
           <h2 className="text-3xl font-bold text-center mb-8">{t.industries}</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -303,8 +293,10 @@ export default function EnterprisePageComponent() {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
                 <Card className="h-full flex flex-col items-center justify-center p-4 hover:bg-blue-50 transition-colors duration-300 cursor-pointer group">
-                  <industry.icon className="w-12 h-12 text-blue-600 mb-2 group-hover:animate-bounce" />
-                  <CardTitle className="text-center text-sm">{t[industry.key]}</CardTitle>
+                <industry.icon className="w-12 h-12 text-blue-600 mb-2 group-hover:animate-bounce" />
+                <CardTitle className="text-center text-sm">
+                    {t[industry.key] as string}
+                </CardTitle>
                 </Card>
               </motion.div>
             ))}
@@ -347,7 +339,7 @@ export default function EnterprisePageComponent() {
           </div>
         </section>
 
-        <motion.section 
+        <motion.section
           className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg p-8 text-center"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -355,9 +347,9 @@ export default function EnterprisePageComponent() {
         >
           <h2 className="text-3xl font-bold mb-4">{t.readyToTransform}</h2>
           <p className="text-xl mb-8">{t.subtitle}</p>
-          <Button 
-            size="lg" 
-            variant="secondary" 
+          <Button
+            size="lg"
+            variant="secondary"
             className="bg-white text-blue-600 hover:bg-blue-50 transform transition-transform duration-300 hover:scale-110"
           >
             {t.contactSales}
@@ -366,43 +358,14 @@ export default function EnterprisePageComponent() {
         </motion.section>
       </main>
 
-      <footer className="bg-gray-800 text-white py-8 mt-16">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="font-bold mb-4">GlobusScreen</h3>
-              <p className="text-sm">{t.footerDescription}</p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">{t.footerSolutions}</h4>
-              <ul className="space-y-2">
-                <li><Link href="/solutions" className="text-sm hover:underline">{t.solutions}</Link></li>
-                <li><Link href="/data" className="text-sm hover:underline">{t.data}</Link></li>
-                <li><Link href="/pricing" className="text-sm hover:underline">{t.pricing}</Link></li>
-                <li><Link href="/enterprise" className="text-sm hover:underline">{t.enterprise}</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">{t.footerCompany}</h4>
-              <ul className="space-y-2">
-                <li><Link href="#" className="text-sm hover:underline">{t.footerAboutUs}</Link></li>
-                <li><Link href="#" className="text-sm hover:underline">{t.footerCareers}</Link></li>
-                <li><Link href="#" className="text-sm hover:underline">{t.footerContact}</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">{t.footerLegal}</h4>
-              <ul className="space-y-2">
-                <li><Link href="#" className="text-sm hover:underline">{t.footerPrivacy}</Link></li>
-                <li><Link href="#" className="text-sm hover:underline">{t.footerTerms}</Link></li>
-              </ul>
-            </div>
-          </div>
-          <div className="mt-8 pt-8 border-t border-gray-700 text-center">
-            <p>&copy; 2023 GlobusScreen. {t.footerCopyright}</p>
-          </div>
-        </div>
-      </footer>
+      <Footer
+        translations={{
+          footer: t.footer,
+          individualScreening: t.individualScreening,
+          batchProcessing: t.batchProcessing,
+          apiIntegration: t.apiIntegration,
+        }}
+      />
     </div>
   )
 }
