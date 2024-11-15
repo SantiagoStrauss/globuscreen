@@ -316,7 +316,7 @@ export default function EnterprisePageComponent() {
                   <div className="absolute top-0 left-0 w-16 h-16 bg-blue-500 rounded-br-full"></div>
                   <div className="pt-20">
                     <p className="italic mb-4 text-lg">&quot;{t.testimonial1}&quot;</p>
-                    <p className="font-semibold">- John Doe, CEO of Global Bank</p>
+                    <p className="font-semibold">- John Darwin, CEO of Global Bank</p>
                   </div>
                 </CardContent>
               </Card>
