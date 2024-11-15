@@ -90,7 +90,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <Button variant="ghost" className="w-full justify-start">
                 <Avatar className="h-8 w-8 mr-2">
                   <AvatarImage src="/placeholder-user.jpg" alt="User" />
-                  <AvatarFallback>JD</AvatarFallback>
+                  <AvatarFallback>SR</AvatarFallback>
                 </Avatar>
                 <span className="truncate">Santiago Ramos</span>
               </Button>
